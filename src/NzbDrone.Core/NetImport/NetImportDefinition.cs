@@ -21,5 +21,7 @@ namespace NzbDrone.Core.NetImport
         public LazyLoaded<Profile> Profile { get; set; }
         public string RootFolderPath { get; set; }
         public override bool Enable => Enabled;
+
+        public NetImportType ListType { get; set; }
     }
 }
