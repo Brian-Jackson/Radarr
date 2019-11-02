@@ -84,7 +84,7 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
                .SetSegment("route", "movie")
                .SetSegment("id", tmdbId.ToString())
                .SetSegment("secondaryRoute", "")
-               .AddQueryParam("append_to_response", "alternative_titles,release_dates,videos")
+               .AddQueryParam("append_to_response", "alternative_titles,release_dates,videos,credits")
                .AddQueryParam("language", langCode.ToUpper())
 
                // .AddQueryParam("country", "US")
@@ -308,6 +308,14 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             }
 
             movie.AlternativeTitles.AddRange(altTitles);
+
+            movie.Cast = resource.credits.Cast.Select(MapCast).ToList();
+            movie.Crew = resource.credits.Crew.Select(MapCrew).ToList();
+
+            if (resource.belongs_to_collection != null)
+            {
+                movie.Collection = MapCollection(resource.belongs_to_collection);
+            }
 
             return movie;
         }
@@ -628,61 +636,57 @@ namespace NzbDrone.Core.MetadataSource.SkyHook
             return null;
         }
 
-        private static Actor MapActors(ActorResource arg)
+        private static Cast MapCast(CastResource arg)
         {
-            var newActor = new Actor
+            var newActor = new Cast
             {
                 Name = arg.Name,
-                Character = arg.Character
+                Character = arg.Character,
+                Order = arg.Order,
+                TmdbId = arg.Id
             };
 
-            if (arg.Image != null)
+            if (arg.Profile_Path != null)
             {
                 newActor.Images = new List<MediaCover.MediaCover>
                 {
-                    new MediaCover.MediaCover(MediaCoverTypes.Headshot, arg.Image)
+                    new MediaCover.MediaCover(MediaCoverTypes.Headshot, "https://image.tmdb.org/t/p/original" + arg.Profile_Path)
                 };
             }
 
             return newActor;
         }
 
-        private static Ratings MapRatings(RatingResource rating)
+        private static Crew MapCrew(CrewResource arg)
         {
-            if (rating == null)
+            var newActor = new Crew
             {
-                return new Ratings();
+                Name = arg.Name,
+                Department = arg.Department,
+                Job = arg.Job,
+                TmdbId = arg.Id
+            };
+
+            if (arg.Profile_Path != null)
+            {
+                newActor.Images = new List<MediaCover.MediaCover>
+                {
+                    new MediaCover.MediaCover(MediaCoverTypes.Headshot, "https://image.tmdb.org/t/p/original" + arg.Profile_Path)
+                };
             }
 
-            return new Ratings
-            {
-                Votes = rating.Count,
-                Value = rating.Value
-            };
+            return newActor;
         }
 
-        private static MediaCover.MediaCover MapImage(ImageResource arg)
+        private static MovieCollection MapCollection(CollectionResource arg)
         {
-            return new MediaCover.MediaCover
+            var newCollection = new MovieCollection
             {
-                Url = arg.Url,
-                CoverType = MapCoverType(arg.CoverType)
+                Name = arg.name,
+                TmdbId = arg.id,
             };
-        }
 
-        private static MediaCoverTypes MapCoverType(string coverType)
-        {
-            switch (coverType.ToLower())
-            {
-                case "poster":
-                    return MediaCoverTypes.Poster;
-                case "banner":
-                    return MediaCoverTypes.Banner;
-                case "fanart":
-                    return MediaCoverTypes.Fanart;
-                default:
-                    return MediaCoverTypes.Unknown;
-            }
+            return newCollection;
         }
 
         public Movie MapMovieToTmdbMovie(Movie movie)

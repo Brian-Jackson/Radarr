@@ -15,7 +15,8 @@ namespace NzbDrone.Core.Movies
         {
             Images = new List<MediaCover.MediaCover>();
             Genres = new List<string>();
-            Actors = new List<Actor>();
+            Cast = new List<Cast>();
+            Crew = new List<Crew>();
             Tags = new HashSet<int>();
             AlternativeTitles = new List<AlternativeTitle>();
         }
@@ -39,7 +40,12 @@ namespace NzbDrone.Core.Movies
         public int Year { get; set; }
         public Ratings Ratings { get; set; }
         public List<string> Genres { get; set; }
-        public List<Actor> Actors { get; set; }
+
+        public MovieCollection Collection { get; set; }
+
+        public List<Cast> Cast { get; set; }
+        public List<Crew> Crew { get; set; }
+
         public string Certification { get; set; }
         public string RootFolderPath { get; set; }
         public MoviePathState PathState { get; set; }

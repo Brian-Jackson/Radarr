@@ -82,7 +82,9 @@ namespace NzbDrone.Core.Movies
             movie.Runtime = movieInfo.Runtime;
             movie.Images = movieInfo.Images;
             movie.Ratings = movieInfo.Ratings;
-            movie.Actors = movieInfo.Actors;
+            movie.Cast = movieInfo.Cast;
+            movie.Crew = movieInfo.Crew;
+            movie.Collection = movieInfo.Collection;
             movie.Genres = movieInfo.Genres;
             movie.Certification = movieInfo.Certification;
             movie.InCinemas = movieInfo.InCinemas;
