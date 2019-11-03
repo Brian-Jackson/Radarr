@@ -112,6 +112,13 @@ export const filterPredicates = {
     return statistics.episodeCount - statistics.episodeFileCount > 0;
   },
 
+  collection: function(item, filterValue, type) {
+    const predicate = filterTypePredicates[type];
+    const { collection } = item;
+
+    return predicate(collection ? collection.name : '', filterValue);
+  },
+
   added: function(item, filterValue, type) {
     return dateFilterPredicate(item.added, filterValue, type);
   },

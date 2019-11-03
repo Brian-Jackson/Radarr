@@ -64,6 +64,7 @@ class MovieIndexRow extends Component {
       status,
       title,
       titleSlug,
+      collection,
       studio,
       qualityProfile,
       added,
@@ -139,6 +140,17 @@ class MovieIndexRow extends Component {
                     titleSlug={titleSlug}
                     title={title}
                   />
+                </VirtualTableRowCell>
+              );
+            }
+
+            if (name === 'collection') {
+              return (
+                <VirtualTableRowCell
+                  key={name}
+                  className={styles[name]}
+                >
+                  {collection ? collection.name : null }
                 </VirtualTableRowCell>
               );
             }
@@ -346,6 +358,7 @@ MovieIndexRow.propTypes = {
   title: PropTypes.string.isRequired,
   titleSlug: PropTypes.string.isRequired,
   studio: PropTypes.string,
+  collection: PropTypes.object,
   qualityProfile: PropTypes.object.isRequired,
   added: PropTypes.string,
   inCinemas: PropTypes.string,
