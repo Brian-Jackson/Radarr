@@ -30,7 +30,9 @@ import MoviePoster from 'Movie/MoviePoster';
 import EditMovieModalConnector from 'Movie/Edit/EditMovieModalConnector';
 import DeleteMovieModal from 'Movie/Delete/DeleteMovieModal';
 import MovieHistoryTable from 'Movie/History/MovieHistoryTable';
-import MovieTitlesTable from 'Movie/Titles/MovieTitlesTable';
+import MovieTitlesTable from './Titles/MovieTitlesTable';
+import MovieCastPosters from './Cast/MovieCastPosters';
+import MovieCrewPosters from './Crew/MovieCrewPosters';
 import MovieAlternateTitles from './MovieAlternateTitles';
 import MovieDetailsLinks from './MovieDetailsLinks';
 import InteractiveSearchTable from 'InteractiveSearch/InteractiveSearchTable';
@@ -176,12 +178,15 @@ class MovieDetails extends Component {
       inCinemas,
       images,
       alternateTitles,
+      cast,
+      crew,
       // tags,
       isSaving,
       isRefreshing,
       isSearching,
       isFetching,
       isPopulated,
+      isSmallScreen,
       movieFilesError,
       hasMovieFiles,
       previousMovie,
@@ -513,6 +518,20 @@ class MovieDetails extends Component {
                   Titles
                 </Tab>
 
+                <Tab
+                  className={styles.tab}
+                  selectedClassName={styles.selectedTab}
+                >
+                  Cast
+                </Tab>
+
+                <Tab
+                  className={styles.tab}
+                  selectedClassName={styles.selectedTab}
+                >
+                  Crew
+                </Tab>
+
                 {
                   selectedTabIndex === 1 &&
                     <div className={styles.filterIcon}>
@@ -543,6 +562,20 @@ class MovieDetails extends Component {
               <TabPanel>
                 <MovieTitlesTable
                   movieId={id}
+                />
+              </TabPanel>
+
+              <TabPanel>
+                <MovieCastPosters
+                  items={cast}
+                  isSmallScreen={isSmallScreen}
+                />
+              </TabPanel>
+
+              <TabPanel>
+                <MovieCrewPosters
+                  items={crew}
+                  isSmallScreen={isSmallScreen}
                 />
               </TabPanel>
             </Tabs>
@@ -602,6 +635,8 @@ MovieDetails.propTypes = {
   inCinemas: PropTypes.string.isRequired,
   overview: PropTypes.string.isRequired,
   images: PropTypes.arrayOf(PropTypes.object).isRequired,
+  cast: PropTypes.arrayOf(PropTypes.object).isRequired,
+  crew: PropTypes.arrayOf(PropTypes.object).isRequired,
   alternateTitles: PropTypes.arrayOf(PropTypes.string).isRequired,
   tags: PropTypes.arrayOf(PropTypes.number).isRequired,
   isSaving: PropTypes.bool.isRequired,
@@ -609,6 +644,7 @@ MovieDetails.propTypes = {
   isSearching: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   isPopulated: PropTypes.bool.isRequired,
+  isSmallScreen: PropTypes.bool.isRequired,
   movieFilesError: PropTypes.object,
   hasMovieFiles: PropTypes.bool.isRequired,
   previousMovie: PropTypes.object.isRequired,

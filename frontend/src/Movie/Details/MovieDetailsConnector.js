@@ -7,6 +7,7 @@ import { findCommand, isCommandExecuting } from 'Utilities/Command';
 import { registerPagePopulator, unregisterPagePopulator } from 'Utilities/pagePopulator';
 import createAllMoviesSelector from 'Store/Selectors/createAllMoviesSelector';
 import createCommandsSelector from 'Store/Selectors/createCommandsSelector';
+import createDimensionsSelector from 'Store/Selectors/createDimensionsSelector';
 import { fetchMovieFiles, clearMovieFiles } from 'Store/Actions/movieFileActions';
 import { toggleMovieMonitored } from 'Store/Actions/movieActions';
 import { fetchQueueDetails, clearQueueDetails } from 'Store/Actions/queueActions';
@@ -45,7 +46,8 @@ function createMapStateToProps() {
     selectMovieFiles,
     createAllMoviesSelector(),
     createCommandsSelector(),
-    (titleSlug, movieFiles, allMovies, commands) => {
+    createDimensionsSelector(),
+    (titleSlug, movieFiles, allMovies, commands, dimensions) => {
       const sortedMovies = _.orderBy(allMovies, 'sortTitle');
       const movieIndex = _.findIndex(sortedMovies, { titleSlug });
       const movie = sortedMovies[movieIndex];
@@ -101,7 +103,8 @@ function createMapStateToProps() {
         hasMovieFiles,
         sizeOnDisk,
         previousMovie,
-        nextMovie
+        nextMovie,
+        isSmallScreen: dimensions.isSmallScreen
       };
     }
   );
@@ -222,6 +225,7 @@ MovieDetailsConnector.propTypes = {
   isRefreshing: PropTypes.bool.isRequired,
   isRenamingFiles: PropTypes.bool.isRequired,
   isRenamingMovie: PropTypes.bool.isRequired,
+  isSmallScreen: PropTypes.bool.isRequired,
   fetchMovieFiles: PropTypes.func.isRequired,
   clearMovieFiles: PropTypes.func.isRequired,
   clearReleases: PropTypes.func.isRequired,
