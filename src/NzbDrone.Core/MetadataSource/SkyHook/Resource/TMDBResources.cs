@@ -15,6 +15,17 @@ namespace NzbDrone.Core.MetadataSource.SkyHook.Resource
         public int total_pages { get; set; }
     }
 
+    public class AuthRefreshTokenResponse
+    {
+        public string request_token { get; set; }
+    }
+
+    public class AuthAccessTokenResponse
+    {
+        public string access_token { get; set; }
+        public string account_id { get; set; }
+    }
+
     public class MovieResult
     {
         public string poster_path { get; set; }
@@ -35,6 +46,13 @@ namespace NzbDrone.Core.MetadataSource.SkyHook.Resource
         public string trailer_site { get; set; }
         public string physical_release { get; set; }
         public string physical_release_note { get; set; }
+    }
+
+    public class CreditsResult : MovieResult
+    {
+        public string department { get; set; }
+        public string job { get; set; }
+        public string credit_id { get; set; }
     }
 
     public class MovieResourceRoot
@@ -188,6 +206,23 @@ namespace NzbDrone.Core.MetadataSource.SkyHook.Resource
         public string iso_639_1 { get; set; }
         public string name { get; set; }
         public object poster_path { get; set; }
+    }
+
+    public class CollectionResponseRoot
+    {
+        public int id { get; set; }
+        public string name { get; set; }
+        public string overview { get; set; }
+        public string poster_path { get; set; }
+        public string backdrop_path { get; set; }
+        public MovieResult[] parts { get; set; }
+    }
+
+    public class PersonCreditsRoot
+    {
+        public CreditsResult[] cast { get; set; }
+        public CreditsResult[] crew { get; set; }
+        public int id { get; set; }
     }
 
     public class Item : MovieResult
